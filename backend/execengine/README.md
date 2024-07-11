@@ -6,3 +6,4 @@ The ExecEngine is a simple, lightweight, and efficient execution engine for runn
 
 ### Features:
     - new_container() -> str: Create a new container and return the container ID
+    - get_containers() -> List[str]: Get all available containers
