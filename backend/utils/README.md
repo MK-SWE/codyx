@@ -34,7 +34,7 @@ The database connection is configured through environment variables defined in t
 - `query(cls)`: Initiates a query on the current database session for a specific class.
 - `rollback()`: Rolls back the current transaction in the session.
 
-#### Environment Setup :environment_saver:
+#### Environment Setup :world_map:
 
 To set up the environment for `DBStorage`, ensure that the `.utils.env` file is correctly configured with your database credentials and environment. The class automatically loads these settings upon instantiation.
 
