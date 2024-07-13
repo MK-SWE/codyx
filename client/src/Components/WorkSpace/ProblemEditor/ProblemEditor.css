@@ -1,0 +1,14 @@
+.codeeditor {
+  height: 100%;
+  padding-left: 8px;
+  border-radius: 50px;
+}
+.codeeditor .codeType {
+  padding: 5px 10px;
+  background: var(--second-color1);
+  border-radius: 5px;
+  border-bottom: 5px solid #fff;
+}
+.cm-theme {
+  flex: 1;
+}

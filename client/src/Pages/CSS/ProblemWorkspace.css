@@ -1,0 +1,23 @@
+.workspace {
+  height:  calc(100vh - 70px);
+  max-height: calc(100vh - 70px);
+  border-top: 1px solid var(--second-color1);
+}
+.split {
+  display: flex;
+  flex-direction: row;
+  min-height: 100%;
+  padding: 20px;
+}
+
+.gutter {
+  background-color: var(--second-color1);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  border-radius: 5px;
+}
+
+.gutter.gutter-horizontal {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+  cursor: col-resize;
+}
