@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Base model for all models in the application"""
 
-import utils
+from utils import STORAGE
 from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
@@ -54,12 +54,12 @@ class BaseModel(Base):
     def save(self):
         """Save the model to the database"""
         self.updated_at = datetime.now()
-        utils.storage.new(self)
-        utils.storage.save()
+        STORAGE.new(self)
+        STORAGE.save()
 
     def delete(self):
         """Delete the model from the database"""
-        utils.storage.delete(self)
+        STORAGE.delete(self)
 
     def to_dict(self):
         """Return a dictionary representation of the model"""
