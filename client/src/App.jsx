@@ -3,9 +3,9 @@ import './App.css'
 import HomePage from './Pages/HomePage'
 import Problems from './Pages/Problems'
 import LoginSignup from './Pages/LoginSignup'
-import ContentLearn from './Pages/ContentLearn'
 import ProblemWorkspace from './Pages/ProblemWorkspace'
 import Navbar from './Components/Navbar/Navbar'
+import About from './Pages/About'
 
 function App() {
   
@@ -18,7 +18,7 @@ function App() {
           <Route path='/' element={<HomePage />}/>
           <Route path='/problems' element={<Problems />} />
           <Route path='/problems/:problemId' element={<ProblemWorkspace />}/>
-          <Route path='/content' element={<ContentLearn />}/>
+          <Route path='/about' element={<About/>}/>
           <Route path='/auth' element={<LoginSignup />}/>
         </Routes>
       </BrowserRouter>

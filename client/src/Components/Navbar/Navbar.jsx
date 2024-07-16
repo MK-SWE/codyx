@@ -9,7 +9,7 @@ function Navbar() {
       </Link></h1>
       <ul className="nav-menu">
         <li><Link to="/problems">Problems</Link></li>
-        <li><Link to="/content">Content</Link></li>
+        <li><Link to="/about">About</Link></li>
       </ul>
       <div className="login">
         <Link to="/auth"><button>Login</button></Link>
