@@ -93,3 +93,4 @@ class User(BaseModel, Base, UserMixin):
     def is_active(self):
         """User active method."""
         return self.active
+

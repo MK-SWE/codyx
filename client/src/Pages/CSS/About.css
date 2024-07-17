@@ -1,0 +1,43 @@
+.about-container {
+  padding: 20px;
+  max-width: 900px;
+  text-align: center;
+  margin: auto;
+}
+.about-container h1 {
+  margin-bottom: 50px;
+}
+.about-container p {
+  margin-bottom: 50px;
+}
+.developers-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.about-container h2 {
+  margin-bottom: 50px;
+}
+
+.developer-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  width: 200px;
+}
+
+.developer-card img {
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+.developer-role {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.developer-bio {
+  font-size: 0.9em;
+  color: #555;
+}
