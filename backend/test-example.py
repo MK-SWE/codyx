@@ -2,13 +2,13 @@
 
 
 from models.admin import Admin
-from models.user import UserModel
-from models.problem import ChallengeModel
+from models.user import User
+from models.challenge import Challenge
 
 # Example usage
 admin = Admin(username="admin1", password="password123")
-user = UserModel(name="user1", password="userpass")
-challenge = ChallengeModel(
+user = User(name="user1", password="userpass")
+challenge = Challenge(
     name="Challenge1",
     description="Solve this challenge",
     input="input",

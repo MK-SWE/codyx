@@ -1,4 +1,4 @@
-from utils import DBStorage
+from utils.db import DBStorage
 
 STORAGE = DBStorage()
 STORAGE.reload()
