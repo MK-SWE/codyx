@@ -7,6 +7,9 @@ import sqlalchemy
 import sqlalchemy.exc
 from os import getenv, path
 from models.base import Base
+from models.user import User
+from models.admin import Admin
+from models.challenge import Challenge
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -16,7 +19,8 @@ parent_dir = path.dirname(path.abspath(__file__))
 dotenv_path = path.join(parent_dir, '.utils.env')
 load_dotenv(dotenv_path=dotenv_path, override=True)
 
-CLASSES = {}
+CLASSES = {'User': User, 'Admin': Admin, 'Challenge': Challenge}
+
 
 class DBStorage:
     """MySQL database storage class"""
@@ -59,12 +63,17 @@ class DBStorage:
     def all(self, cls=None):
         """query on the current database session"""
         new_dict = {}
-        for cl in CLASSES:
-            if cls is None or cls is CLASSES[cl] or cls is cl:
-                objs = self.__session.query(CLASSES[cl]).all()
+        if cls is None:
+            for cl in CLASSES.values():
+                objs = self.query(cl).all()
                 for obj in objs:
                     key = obj.__class__.__name__ + '.' + obj.id
                     new_dict[key] = obj
+        else:
+            objs = self.query(cls).all()
+            for obj in objs:
+                key = obj.__class__.__name__ + '.' + obj.id
+                new_dict[key] = obj
         return (new_dict)
 
     def new(self, obj):

@@ -1,0 +1,32 @@
+.problemcontent {
+  max-width: 900px;
+  margin: auto;
+  padding-top: 50px;
+}
+.problemcontent table {
+  border-collapse: collapse;
+  width: 100%;
+  color: var(--second-color);
+}
+.problemcontent table thead {
+  color: var(--primary-color);
+}
+.problemcontent table tr:nth-child(even) {
+  background: #a7888825;
+  position: relative;
+  
+}
+.problemcontent table th {
+  padding: 10px 0px;
+  
+}
+.problemcontent table th:not(.status) {
+  text-align: start;
+}
+.problemcontent table td:last-child {
+  width: 200px
+}
+.problemcontent a:hover {
+  color: var(--primary-color);
+}
+
