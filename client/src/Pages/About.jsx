@@ -5,7 +5,7 @@ const developers = [
     name: 'Eslam',
     role: 'Frontend Developer',
     bio: 'Eslam is a passionate frontend developer who loves building beautiful and intuitive user interfaces.',
-    image: 'https://via.placeholder.com/150'
+    image: 'https://avatars.githubusercontent.com/u/114030950?v=4'
   },
   {
     name: 'Tariq',
@@ -17,13 +17,13 @@ const developers = [
     name: 'Mohamed',
     role: 'Backend Developer',
     bio: 'Mohamed is a Backend Developer who enjoys working on both the frontend and backend.',
-    image: 'https://via.placeholder.com/150'
+    image: 'https://avatars.githubusercontent.com/u/128869362?v=4'
   },
   {
     name: 'Amal',
     role: 'Backend Developer',
     bio: 'Amal is a Backend developer who enjoys working on the backend.',
-    image: 'https://via.placeholder.com/150'
+    image: 'https://avatars.githubusercontent.com/u/129003996?v=4'
   }
 ]
 
