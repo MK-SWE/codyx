@@ -170,3 +170,6 @@ dump.rdb
 
 # Flask session files
 .flask_session/
+
+# CLI Commands
+backend/Cli.commands
