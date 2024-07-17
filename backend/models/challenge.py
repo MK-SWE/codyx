@@ -36,4 +36,3 @@ class Challenge(BaseModel):
             except json.JSONDecodeError:
                 raise ValueError("Invalid JSON string")
         self._starter_function = json.dumps(value)
-                
