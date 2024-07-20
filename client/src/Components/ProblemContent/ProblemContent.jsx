@@ -1,9 +1,28 @@
 import './ProblemContent.css';
-import problemsList from '../../assets/mockProblems';
 import { Link } from "react-router-dom";
+import { fetchProblems } from '../../redux/reducers/problemSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 
 function ProblemContent() {
+  const dispatch = useDispatch();
+  const problems = useSelector((state) => state.problems.problemList);
+  const loading = useSelector((state) => state.problems.loading);
+  const error = useSelector((state) => state.problems.error);
+
+  useEffect(() => {
+    dispatch(fetchProblems());
+  }, [dispatch]);
+
+  if (loading === 'pending') {
+    return <p>Loading problems...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
   return (
     <div className='problemcontent'>
       <table>
@@ -17,7 +36,7 @@ function ProblemContent() {
         </thead>
         <tbody>
           {
-            problemsList.map((problem) => {
+            problems.map((problem) => {
               return (
                 <tr key={problem.id}> 
                   <th className='status'>✓</th>
