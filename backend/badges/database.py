@@ -33,6 +33,7 @@ class UserBadge(Base):
 
 # Relationship between models
 User.badges = relationship("Badge", secondary_table=UserBadge, backref="users")
+User.completed_challenges = relationship("Challenge", secondary_table="user_challenge_association", backref="users")  # Add another association table for user-challenge relation
 Challenge.awarded_badges = relationship("Badge", secondary_table="challenge_badge_association", backref="challenges")  # Add another association table for challenge-badge relation
 
 # Create the database engine
