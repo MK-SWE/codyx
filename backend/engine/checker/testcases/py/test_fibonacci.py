@@ -1,3 +1,4 @@
+import json
 from submit import fibonacci
 
 def main():
@@ -63,7 +64,7 @@ def main():
             'got': test_4
         }
 
-    return res
+    return json.dumps(res)
 
 if __name__ == '__main__':
     print(main())

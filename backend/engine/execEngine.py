@@ -41,8 +41,13 @@ class DOCKER:
             str: The ID of the newly created Docker container.
         """
         try:
+            # Check if the base:latest image is available
+            images = subprocess.run(['docker', 'images', '--format', '{{.Repository}}:{{.Tag}}'], stdout=subprocess.PIPE).stdout.decode().strip()
+            if 'base:latest' not in images:
+                DOCKER.rebase()
+
             container_id = subprocess.run(['docker', 'run', '-d',
-                                           '-v', f'{DOCKER.config["testcases"]}/testcases/:/usr/src/app/testcases',
+                                           '-v', f'{DOCKER.config["checker"]}:/usr/src/app/checker',
                                            '-it', 'base:latest'],
                                            stdout=subprocess.PIPE).stdout.decode().strip()[:12]
             DOCKER.containers.append(container_id)
@@ -91,6 +96,8 @@ class DOCKER:
         Refreshes the list of Docker containers.
         """
         DOCKER.containers = DOCKER.get_containers()
+        if len(DOCKER.containers) == 0:
+            DOCKER.new_container
         return
 
     @staticmethod
@@ -107,7 +114,7 @@ class DOCKER:
         return
 
     @staticmethod
-    def run_tests(clientID: str, challenge_name: str, code: str, submit_lang: str) -> str:
+    def run_tests(clientID: str, challenge_name: str, code: str, submit_lang: str) -> dict:
         """
         Runs tests in a Docker container and returns the test results.
 
@@ -118,19 +125,12 @@ class DOCKER:
             submit_lang (str): The language of the submitted code.
 
         Returns:
-            str: The test results.
+            dict: The test results.
         """
         if len(DOCKER.containers) == 0:
             DOCKER.refresh_containers()
 
         container_id = DOCKER.containers[0]
-        res = subprocess.run(['docker', 'exec', '-it', '180cfc993f9e5ad616b97509118525847d5aa3bddac59e64c7fb5dc7974a698a', 'python3', 'checker.py', clientID, challenge_name, code, submit_lang], stdout=subprocess.PIPE).stdout.decode().strip()
+        res = subprocess.run(['docker', 'exec', '-it', container_id, 'python3', 'checker/checker.py', clientID, challenge_name, code, submit_lang], stdout=subprocess.PIPE).stdout.decode().strip()
         print(res)
         return res
-        # failed_tests = []
-        # for k, v in res.__dict__.items():
-        #     if v.status != 'OK':
-        #         failed_tests.append(k)
-        # if len(failed_tests) > 0:
-        #     score = 100% - (len(failed_tests) / len(res.__dict__.keys())) * 100
-        #     return f'{score}%', failed_tests
