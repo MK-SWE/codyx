@@ -5,7 +5,7 @@ import re
 import sys
 import cmd
 import shlex
-from utils.__init__ import STORAGE
+from backend.utils.__init__ import STORAGE
 
 
 RED = "\033[31m"  # Red text
@@ -30,9 +30,9 @@ class CodyX(cmd.Cmd):
     """Guidy Admin console"""
     prompt = f'{YELLOW}CodyX>{RESET} ' if sys.__stdin__.isatty() else ''
 
-    from models.user import User
-    from models.admin import Admin
-    from models.challenge import Challenge
+    from backend.models.user import User
+    from backend.models.admin import Admin
+    from backend.models.challenge import Challenge
     classes = {"User": User,
                "Admin": Admin,
                "Challenge": Challenge

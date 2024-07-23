@@ -173,3 +173,7 @@ dump.rdb
 
 # CLI Commands
 backend/Cli.commands
+
+# Ignore local certificates and keys
+*.key
+*.pem
