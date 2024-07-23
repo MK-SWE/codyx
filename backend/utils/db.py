@@ -13,6 +13,7 @@ from backend.models.challenge import Challenge
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+from flask_sqlalchemy import SQLAlchemy
 
 
 parent_dir = path.dirname(path.abspath(__file__))
@@ -110,8 +111,7 @@ class DBStorage():
 
     def query(self, cls):
         """query on the current database session"""
-        print(self.session.query_property(cls))
-        return self.session.query_property(cls)
+        return self.__session.query
 
     def rollback(self):
         """rollback a transaction"""
