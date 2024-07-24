@@ -9,7 +9,7 @@ const initialState = {
 export const fetchProblems = createAsyncThunk(
   'problems/fetchProblems', 
   async () => {
-    const response = await fetch('http://localhost:5000/api/problems');
+    const response = await fetch('http://localhost:5000/problems');
     if (!response.ok) {
       throw new Error('Failed to fetch problems');
     }
