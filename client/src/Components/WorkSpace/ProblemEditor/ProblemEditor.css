@@ -1,7 +1,9 @@
 .codeeditor {
+  border-radius: 4px;
+  background: #8888883d;
+  border: 1px solid #8888883d;
   height: 100%;
-  padding-left: 8px;
-  border-radius: 50px;
+  max-height: 100%; 
 }
 .codeeditor .codeType {
   padding: 5px 10px;
@@ -11,4 +13,16 @@
 }
 .cm-theme {
   flex: 1;
+}
+.cm-scroller {
+  padding-left: 8px;
+}
+.cm-scroller::-webkit-scrollbar {
+  width: 8px;
+  background-color: #555;
+  border-radius: 10px;
+}
+.cm-scroller::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
 }
