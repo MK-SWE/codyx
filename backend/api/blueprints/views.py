@@ -1,6 +1,5 @@
 """ Blueprint module """
-from flask import Blueprint
-from flask import jsonify
+from flask import Blueprint, jsonify, request
 
 views = Blueprint('views', __name__)
 
@@ -60,7 +59,7 @@ def problem(param):
     """ Problem page route handler """
     # TODO: Retrieve problem details based on the param
     problemDetails = {
-        'id': param,
+        'id': 1,
         'title': "1. Two Sum",
         'problemStatement': "<p>\n  Given an array of integers <code>nums</code> and an integer <code>target</code>, return\n  <em>indices of the two numbers such that they add up to</em> <code>target</code>.\n</p>\n<p>\n  You may assume that each input would have <strong>exactly one solution</strong>, and you\n  may not use thesame element twice.\n</p>\n<p>You can return the answer in any order.</p>",
         'examples': [
@@ -86,3 +85,9 @@ def problem(param):
         'starterCode': "function twoSum(nums, target) {\n  // Your code here\n}",
     }
     return jsonify(problemDetails)
+
+@views.route('/submit', methods=['POST'])
+def submit():
+    """ Submit page route handler """
+    print(request.get_json())
+    return "<h1>Welcome to CodyX submit page</h1>"

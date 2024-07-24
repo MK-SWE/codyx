@@ -26,7 +26,7 @@ function ProblemWorkspace() {
     <div className="workspace" >
       <Split className="split" minSize={400}>
         <div><ProblemDescription problem={problem} /></div>
-        <div><ProblemEditor starterCode={problem.starterCode}/></div>   
+        <div><ProblemEditor starterCode={problem.starterCode} id={problem.id}/></div>   
       </Split>
     </div>
   )
