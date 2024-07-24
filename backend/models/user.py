@@ -4,6 +4,8 @@ from .base import BaseModel, Base
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer, Boolean
 from datetime import datetime
+from backend.engine.execEngine import DOCKER
+import json
 
 db = SQLAlchemy()
 
@@ -65,20 +67,30 @@ class User(BaseModel, Base, UserMixin, db.Model):
         """ Delete user account """
         self.delete()
     
-    def submit_challenge(self, challenge):
+    def submit_challenge(self, challenge, code: str, lang: str):
         """ Submit challenge """
         if challenge:
-        # Submit challenge logic (placeholder)
-        # Use execEngine here
-        # execEngine(challenge)
-        # if execEngine(challenge) == True:
-            if challenge.difficulty == 'easy':
-                self.points += 10
-            elif challenge.difficulty == 'medium':
-                self.points += 20
+            res = DOCKER.run_tests(self.id, challenge.name, code, lang)
+            if res:
+                res = json.loads(res)
             else:
-                self.points += 30
+                res = {}
+            failed_tests = []
+            for k, v in res.items():
+                if v["status"] != 'OK':
+                    failed_tests.append(k)
+            if len(failed_tests) > 0:
+                score = (100 - ((len(failed_tests) / len(res.keys())) * 100)) / 100
+            else:
+                score = 1
+            if challenge.difficulty == 'easy':
+                self.points += 10 * score
+            elif challenge.difficulty == 'medium':
+                self.points += 20 * score
+            else:
+                self.points += 30 * score
             self.save()
+            return f'{score}%', failed_tests
 
     def star_challenge(self, challenge):
         # Star challenge logic (placeholder)
