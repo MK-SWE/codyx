@@ -1,12 +1,15 @@
 import bcrypt
-from flask_login import UserMixin
+from flask_user import UserMixin
 from .base import BaseModel, Base
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer, Boolean
 from datetime import datetime
 from backend.engine.execEngine import DOCKER
 import json
 
-class User(BaseModel, Base, UserMixin):
+db = SQLAlchemy()
+
+class User(BaseModel, Base, UserMixin, db.Model):
     """User class to interact with the API.
 
     Attributes:
@@ -133,3 +136,7 @@ class User(BaseModel, Base, UserMixin):
         """User active method."""
         return self.active
 
+    @classmethod
+    def query(cls):
+        """User query method."""
+        return db.session.query

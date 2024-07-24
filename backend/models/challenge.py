@@ -1,5 +1,5 @@
 import json
-from models.base import BaseModel
+from backend.models.base import BaseModel
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.dialects.mysql import JSON
 

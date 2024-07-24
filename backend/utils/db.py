@@ -6,13 +6,14 @@ Contains the class DBStorage
 import sqlalchemy
 import sqlalchemy.exc
 from os import getenv, path
-from models.base import Base
-from models.user import User
-from models.admin import Admin
-from models.challenge import Challenge
+from backend.models.base import Base
+from backend.models.user import User
+from backend.models.admin import Admin
+from backend.models.challenge import Challenge
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+from flask_sqlalchemy import SQLAlchemy
 
 
 parent_dir = path.dirname(path.abspath(__file__))
@@ -22,7 +23,7 @@ load_dotenv(dotenv_path=dotenv_path, override=True)
 CLASSES = {'User': User, 'Admin': Admin, 'Challenge': Challenge}
 
 
-class DBStorage:
+class DBStorage():
     """MySQL database storage class"""
     __engine = None
     __session = None
@@ -36,19 +37,9 @@ class DBStorage:
 
     def __init__(self):
         """Instantiate a DBStorage object"""
-        MYSQL_USER = getenv('DBUSER')
-        MYSQL_PWD = getenv('DBPWD')
-        MYSQL_HOST = getenv('HOST')
-        MYSQL_DB = getenv('DB')
         ENV = getenv('ENV')
-
         try:
-            self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
-                                        format(MYSQL_USER,
-                                                MYSQL_PWD,
-                                                MYSQL_HOST,
-                                                MYSQL_DB),
-                                        pool_pre_ping=True)
+            self.__engine = create_engine(self.get_database_uri(), pool_pre_ping=True)
         except sqlalchemy.exc.SQLAlchemyError and sqlalchemy.exc.OperationalError as e:
             print(f"Error creating engine: {e}")
 
@@ -99,10 +90,6 @@ class DBStorage:
         Session = scoped_session(create_session)
         self.__session = Session
 
-    def close(self):
-        """call remove() method on the private session attribute"""
-        self.__session.close()
-
     def get(self, cls, id):
         """retrieve one object"""
         if cls is None or cls not in CLASSES.values():
@@ -124,8 +111,21 @@ class DBStorage:
 
     def query(self, cls):
         """query on the current database session"""
-        return self.__session.query(cls)
+        return self.__session.query
 
     def rollback(self):
         """rollback a transaction"""
         self.__session.rollback()
+
+    def close(self):
+        """close the session"""
+        self.__session.close()
+
+    def get_database_uri(self):
+        """return the database URI"""
+        MYSQL_USER = getenv('DBUSER')
+        MYSQL_PWD = getenv('DBPWD')
+        MYSQL_HOST = getenv('HOST')
+        MYSQL_DB = getenv('DB')
+        URI = f'mysql+mysqldb://{MYSQL_USER}:{MYSQL_PWD}@{MYSQL_HOST}/{MYSQL_DB}'
+        return URI

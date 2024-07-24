@@ -1,5 +1,6 @@
 .app {
   background: var(--primary-bg);
   color: var(--primary-color);
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
 }

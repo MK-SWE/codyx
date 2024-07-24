@@ -76,6 +76,29 @@ def award_badge(user):
   for badge_id, badge in BADGES.items():
     if badge_id not in user.badges and badge["milestone"](user):
       user.badges.append(badge_id)
-      print(f"Congratulations! You've earned the {badge['name']} badge!")
+      print(f"Congratulations! You've earned the {BADGES[badge_id]['name']} badge!")
       # Save the updated user data
       user.save()
+
+# Function to get a list of all badges earned by a user
+def get_badges(user):
+  return [BADGES[badge_id] for badge_id in user.badges]
+
+# Function to get a list of all badges available
+def get_all_badges():
+  return BADGES.values()
+
+# Function to check if a user has earned a specific badge
+def has_badge(user, badge_id):
+  return badge_id in user.badges
+
+# Function to get a specific badge by ID
+def get_badge(badge_id):
+  return BADGES[badge_id]
+
+# Function to award a badge to a user
+def award_badge(user, badge_id):
+  user.badges.append(badge_id)
+  user.save()
+  print(f"Congratulations! You've earned the {BADGES[badge_id]['name']} badge!")
+

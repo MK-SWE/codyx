@@ -1,5 +1,5 @@
-from models.user import User
-from models.challenge import Challenge
+from backend.models.user import User
+from backend.models.challenge import Challenge
 
 
 class Admin(User):
