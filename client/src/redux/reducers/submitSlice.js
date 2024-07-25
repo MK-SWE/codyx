@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = { 
-  submitDetails: {},
+  data: {},
   loading: false,
   error: null
 };
@@ -36,11 +36,11 @@ const submitSlice = createSlice({
       })
       .addCase(submitProblem.fulfilled, (state, action) => {
         state.loading = 'fulfilled';
-        state.submitDetails = action.payload;
+        state.data = action.payload;
       })
       .addCase(submitProblem.rejected, (state, action) => {
         state.loading = 'rejected';
-        state.error = action.error.message || 'Failed to fetch problems';
+        state.error = action.error.message || 'Failed to submit the code';
       });
   },
 });

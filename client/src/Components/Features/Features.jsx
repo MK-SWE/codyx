@@ -6,14 +6,6 @@ const featuresData = [
     description: 'Solve a wide variety of challenging coding problems that will test your skills and knowledge.'
   },
   {
-    title: 'Community Support',
-    description: 'Engage with a community of developers to discuss problems, share solutions, and get help.'
-  },
-  {
-    title: 'Detailed Explanations',
-    description: 'Access detailed explanations and solutions for each problem to improve your understanding.'
-  },
-  {
     title: 'Regular Updates',
     description: 'Enjoy regularly updated content with new problems added frequently to keep you engaged.'
   },

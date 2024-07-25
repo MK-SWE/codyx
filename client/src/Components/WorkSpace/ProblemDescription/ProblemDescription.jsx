@@ -1,11 +1,14 @@
 import './ProblemDescription.css';
 import PropTypes from 'prop-types';
-// import Problems from '../../../Utils/Problems';
+
 
 function ProblemDescription({problem}) {
   return (
     <div className='problemdescription'>
-      <h2>{ problem.title }</h2>
+      <div>
+        <h2>{ problem.title }</h2>
+        {/* {success && <span>✓</span>} */}
+      </div>
       <div dangerouslySetInnerHTML={{ __html: problem.problemStatement }} />
       <div>
         { problem.examples.map((example, index) => (
