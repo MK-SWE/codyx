@@ -21,9 +21,9 @@
 a {
   text-decoration: none;
 }
-/* body {
-  overflow: hidden;
-} */
-/* body::-webkit-scrollbar {
+body {
+  background: var(--primary-bg);
+}
+body::-webkit-scrollbar {
   display: none;
-} */
+}

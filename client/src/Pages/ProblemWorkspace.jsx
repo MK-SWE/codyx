@@ -4,7 +4,7 @@ import './CSS/ProblemWorkspace.css'
 import ProblemDescription from "../Components/WorkSpace/ProblemDescription/ProblemDescription";
 import ProblemEditor from "../Components/WorkSpace/ProblemEditor/ProblemEditor";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect} from "react";
 import { fetchProblemDetails, selectProblemDetails } from "../redux/reducers/problemDetailsSlice";
 
 function ProblemWorkspace() {
@@ -23,13 +23,18 @@ function ProblemWorkspace() {
   if (!problem) return <div>No problem details available.</div>;
 
   return (
-    <div className="workspace" >
+    <div className="workspace">
       <Split className="split" minSize={400}>
-        <div><ProblemDescription problem={problem} /></div>
-        <div><ProblemEditor starterCode={problem.starterCode}/></div>   
+        <div>
+          <ProblemDescription problem={problem} />
+        </div>
+        <div>
+          <ProblemEditor starterCode={problem.starterCode} id={problem.id} />
+
+        </div>
       </Split>
     </div>
-  )
+  );
 }
 
 

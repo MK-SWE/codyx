@@ -52,14 +52,14 @@ class BaseModel(Base):
 
     def save(self):
         """Save the model to the database"""
-        from utils import STORAGE
+        from backend.utils import STORAGE
         self.updated_at = datetime.now()
         STORAGE.new(self)
         STORAGE.save()
 
     def delete(self):
         """Delete the model from the database"""
-        from utils import STORAGE
+        from backend.utils import STORAGE
         STORAGE.delete(self)
 
     def to_dict(self):

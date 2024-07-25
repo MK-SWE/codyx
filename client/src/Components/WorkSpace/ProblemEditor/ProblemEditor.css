@@ -3,13 +3,30 @@
   background: #8888883d;
   border: 1px solid #8888883d;
   height: 100%;
-  max-height: 100%; 
+  max-height: 100%;
 }
 .codeeditor .codeType {
-  padding: 5px 10px;
   background: var(--second-color1);
+  padding: 2px 10px;
   border-radius: 5px;
-  border-bottom: 5px solid #fff;
+}
+.codeeditor .naveditor {
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #8888883d;
+  padding: 0 10px;
+}
+.codeeditor button{
+  background-color: var(--brand-color);
+  color: #000;
+  font-weight: 600;
+  letter-spacing: 2px;
+  border: 1px solid #444;
+  padding: 5px 30px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 .cm-theme {
   flex: 1;

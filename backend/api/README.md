@@ -8,8 +8,31 @@ The CodyX application is structured around Flask blueprints, allowing for a modu
 
 ### Blueprints
 
+The application consists of the following blueprints:
+
 - [**`Views`**](./blueprints/views.py): Handles the routing and logic for the application's static pages, including the landing, about, contact, terms, and privacy pages.
-- **Auth** (Not included in the current context): Manages user authentication, registration, and session management.
+- [**`Auth`**](./blueprints/auth.py): Manages user authentication, registration, session management, and other user-related functionalities.
+- [**`Errors`**](./blueprints/error_handler.py): Handles application-wide error responses and custom error responses.
+
+### Routes
+
+#### Views Blueprint
+
+- **`/`**: Landing page route handler.
+- **`/about`**: About page route handler.
+- **`/contact`**: Contact page route handler.
+- **`/terms`**: Terms page route handler.
+- **`/privacy`**: Privacy page route handler.
+
+#### Auth Blueprint
+
+- **`/login`**: Handles user login.
+- **`/signup`**: Handles user registration.
+- **`/logout`**: Handles user logout.
+- **`/test`**: Test route handler.
+- **`/challenges`**: Retrieves all challenges.
+- **`/challenges/<param>`**: Retrieves details of a specific challenge.
+- **`/submit`**: Handles challenge submission.
 
 ### Configuration
 

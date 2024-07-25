@@ -5,7 +5,7 @@ function Hero() {
   return (
     <div className='hero'>
       <div className="left">
-        <h1>Welcome to <span>BrandName</span></h1>
+        <h1>Welcome to <span>CodyX</span></h1>
         <p>Level up your coding skills with challenging problems.</p>
         <button><i></i><span>Get Started Now</span></button>
       </div>

@@ -133,7 +133,8 @@ class CodyX(cmd.Cmd):
             [print(f'{CYAN}{k}{RESET}: {GREEN}{v}{RESET}') for k, v in ArgDict.items()]
 
         except Exception as e:
-            print(f"{RED}** {e} **{RESET}")
+            print(f"{RED}** {repr(e.__traceback__)} **{RESET}")
+            print(f"{RED}** {str(e)} **{RESET}")
             return False
 
     def do_show(self, arg):
@@ -214,7 +215,8 @@ class CodyX(cmd.Cmd):
 
         Type, ID = ObjD[0], ObjD[1]
         Key, Value = ObjD[2], ObjD[3] if len(ObjD) > 3 else ""
-        Ints = ["rating", "length"]
+        Ints = ["stars", "solved", "points"]
+        bools = ["active", "authenticated"]
 
         if Type not in self.classes:
             print(f"{RED}** Unidentified Type {Type} **{RESET}")
@@ -225,7 +227,7 @@ class CodyX(cmd.Cmd):
             return
 
         Obj = f'{Type}.{ID}'
-        if Obj not in STORAGE.all():
+        if Obj not in STORAGE.all().keys():
             print(f"{RED}** NO Object Found **{RESET}")
             return
 
@@ -235,12 +237,18 @@ class CodyX(cmd.Cmd):
             except ValueError:
                 Value = 0
 
+        if Key in bools:
+            if Value.lower() == 'true' or Value == '1':
+                Value = True
+            if Value.lower() == 'false' or Value == '0':
+                Value = False
+                
         try:
-            setattr(STORAGE.all()[Obj], Key, Value)
+            setattr(STORAGE.get(self.classes[Type], ID), Key, Value)
+            STORAGE.save()
             print(f"{CYAN}** {Obj} {Key} Updated to {Value} **{RESET}")
-            STORAGE.all()[Obj].save()
         except Exception as e:
-            print(f"{RED}** {e.__cause__} **{RESET}")
+            print(f"{RED}** {str(e)} **{RESET}")
             return False
 
     def do_count(self, arg):
