@@ -3,10 +3,26 @@ from flask_login import UserMixin
 from .base import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Boolean
 from datetime import datetime
+from backend.engine.execEngine import DOCKER
+import json
+
 
 
 class User(BaseModel, Base, UserMixin):
-    """User class to interact with the API."""
+    """User class to interact with the API.
+
+    Attributes:
+        username (str): The username of the user.
+        email (str): The email address of the user.
+        _password (str): The hashed password of the user.
+        full_name (str): The full name of the user.
+        badges (str): A JSON string representing the badges earned by the user.
+        points (int): The total points earned by the user.
+        starred_challenges (str): A JSON string representing the IDs of the challenges starred by the user.
+        active (bool): Indicates whether the user is active or not.
+        authenticated (bool): Indicates whether the user is authenticated or not.
+        role (str): The role of the user.
+    """
 
     __tablename__ = 'users'
 
@@ -63,20 +79,43 @@ class User(BaseModel, Base, UserMixin):
         """ Delete user account """
         self.delete()
     
-    def submit_challenge(self, challenge):
-        """ Submit challenge """
+    def submit_challenge(self, challenge, code: str, lang: str) -> dict:
+        """Submit a challenge and calculate the score.
+
+        Args:
+            challenge (Challenge): The challenge object to submit.
+            code (str): The code to be tested.
+            lang (str): The programming language of the code.
+
+        Returns:
+            dict: A dictionary containing the score and a list of failed tests.
+        """
         if challenge:
-        # Submit challenge logic (placeholder)
-        # Use execEngine here
-        # execEngine(challenge)
-        # if execEngine(challenge) == True:
-            if challenge.difficulty == 'easy':
-                self.points += 10
-            elif challenge.difficulty == 'medium':
-                self.points += 20
+            res = DOCKER.run_tests(self.id, challenge.name, code, lang)
+            if res:
+                res = json.loads(res)
             else:
-                self.points += 30
+                res = {}
+            failed_tests = []
+            for k, v in res.items():
+                if v["status"] != 'OK':
+                    failed_tests.append(k)
+            if len(failed_tests) > 0:
+                score = (100 - ((len(failed_tests) / len(res.keys())) * 100)) / 100
+            else:
+                score = 1
+            if challenge.difficulty == 'easy':
+                self.points += 10 * score
+            elif challenge.difficulty == 'medium':
+                self.points += 20 * score
+            else:
+                self.points += 30 * score
             self.save()
+            res = {
+                "score": score,
+                "failed_tests": failed_tests
+            }
+            return res
 
     def star_challenge(self, challenge):
         # Star challenge logic (placeholder)

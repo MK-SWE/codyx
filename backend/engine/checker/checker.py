@@ -1,7 +1,7 @@
 import os
-import shutil
 import subprocess
 import sys
+import json
 
 def checker():
     """
@@ -31,24 +31,24 @@ def checker():
         'py': 'python',
         'js': 'node'
     }
-
     test_cases = {
-        'py': f'testcases/{lang}/test_{challenge_name}.py',
-        'js': f'testcases/{lang}/{challenge_name}.test.js'
+        'py': f'checker/testcases/{lang}/test_{challenge_name}.py',
+        'js': f'checker/testcases/{lang}/{challenge_name}.test.js'
     }
-
-    os.makedirs(clientid, exist_ok=True)
-    shutil.copy(test_cases[lang], clientid)
-    # Before writing the code to the file, decode the escape sequences
+    
+    subprocess.run(['mkdir', '-p', clientid])
+    subprocess.run(['cp', test_cases[lang], f'{clientid}'])
+    subprocess.run(['touch', f'{clientid}/__init__.py'])
+    
     code_decoded = bytes(code, "utf-8").decode("unicode_escape")
-
     with open(f'{clientid}/submit.{lang}', 'w') as f:
         f.write(code_decoded)
 
+    os.environ['PYTHONPATH'] = f"$PYTHONPATH:/usr/src/app/{clientid}"
     res = subprocess.run([checkers[lang], f'{clientid}/test_{challenge_name}.{lang}'], stdout=subprocess.PIPE).stdout.decode().strip()
 
-    shutil.rmtree(clientid)
     print(res)
+    subprocess.run(['rm', '-rf', clientid])
 
 if __name__ == '__main__':
     checker()

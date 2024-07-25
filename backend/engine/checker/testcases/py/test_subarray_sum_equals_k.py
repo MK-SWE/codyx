@@ -1,17 +1,16 @@
-from submit import fibonacci
+from submit import subarray_sum_equals_k
 
 def main():
     examples = {
-        'test_1': {'input': 0, 'expected': 0},
-        'test_2': {'input': 1, 'expected': 1},
-        'test_3': {'input': -1, 'expected': 1},
-        'test_4': {'input': 6, 'expected': 8},
-        'test_5': {'input': 10, 'expected': 55}
+        'test_1': {'input': [[1, 1, 1], 2], 'expected': 2},
+        'test_2': {'input': [[1, 2, 3], 3], 'expected': 2},
+        'test_3': {'input': [[1, -1, 0], 0], 'expected': 3},
+        'test_4': {'input': [[], 5], 'expected': 0}
     }
     res = {}
 
     try:
-        test_1 = fibonacci(examples['test_1']['input'])
+        test_1 = subarray_sum_equals_k(examples['test_1']['input'][0], examples['test_1']['input'][1])
         if test_1 == examples['test_1']['expected']:
             res['test_1'] = {
                 'status': 'OK',
@@ -35,7 +34,7 @@ def main():
         }
 
     try:
-        test_2 = fibonacci(examples['test_2']['input'])
+        test_2 = subarray_sum_equals_k(examples['test_2']['input'][0], examples['test_2']['input'][1])
         if test_2 == examples['test_2']['expected']:
             res['test_2'] = {
                 'status': 'OK',
@@ -59,31 +58,7 @@ def main():
         }
 
     try:
-        test_3 = fibonacci(examples['test_3']['input'])
-        if test_3 == examples['test_3']['expected']:
-            res['test_3'] = {
-                'status': 'OK',
-                'input': examples['test_3']['input'],
-                'expected': examples['test_3']['expected'],
-                'got': test_3
-            }
-        else:
-            res['test_3'] = {
-                'status': 'Error',
-                'input': examples['test_3']['input'],
-                'expected': examples['test_3']['expected'],
-                'got': test_3
-            }
-    except Exception as error:
-        res['test_3'] = {
-            'status': 'Error',
-            'input': examples['test_3']['input'],
-            'expected': examples['test_3']['expected'],
-            'got': str(error)
-        }
-
-    try:
-        test_4 = fibonacci(examples['test_4']['input'])
+        test_4 = subarray_sum_equals_k(examples['test_4']['input'][0], examples['test_4']['input'][1])
         if test_4 == examples['test_4']['expected']:
             res['test_4'] = {
                 'status': 'OK',
@@ -103,30 +78,6 @@ def main():
             'status': 'Error',
             'input': examples['test_4']['input'],
             'expected': examples['test_4']['expected'],
-            'got': str(error)
-        }
-
-    try:
-        test_5 = fibonacci(examples['test_5']['input'])
-        if test_5 == examples['test_5']['expected']:
-            res['test_5'] = {
-                'status': 'OK',
-                'input': examples['test_5']['input'],
-                'expected': examples['test_5']['expected'],
-                'got': test_5
-            }
-        else:
-            res['test_5'] = {
-                'status': 'Error',
-                'input': examples['test_5']['input'],
-                'expected': examples['test_5']['expected'],
-                'got': test_5
-            }
-    except Exception as error:
-        res['test_5'] = {
-            'status': 'Error',
-            'input': examples['test_5']['input'],
-            'expected': examples['test_5']['expected'],
             'got': str(error)
         }
 

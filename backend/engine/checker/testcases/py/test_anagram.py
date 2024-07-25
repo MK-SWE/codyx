@@ -1,17 +1,15 @@
-from submit import fibonacci
+from submit import anagram
 
 def main():
     examples = {
-        'test_1': {'input': 0, 'expected': 0},
-        'test_2': {'input': 1, 'expected': 1},
-        'test_3': {'input': -1, 'expected': 1},
-        'test_4': {'input': 6, 'expected': 8},
-        'test_5': {'input': 10, 'expected': 55}
+        'test_1': {'input': ["hello", "world"], 'expected': False},
+        'test_2': {'input': ["listen","silent"], 'expected': True},
+        'test_3': {'input': ["racecar","carrace"], 'expected': True}
     }
     res = {}
 
     try:
-        test_1 = fibonacci(examples['test_1']['input'])
+        test_1 = anagram(examples['test_1']['input'][0], examples['test_1']['input'][1])
         if test_1 == examples['test_1']['expected']:
             res['test_1'] = {
                 'status': 'OK',
@@ -35,7 +33,7 @@ def main():
         }
 
     try:
-        test_2 = fibonacci(examples['test_2']['input'])
+        test_2 = anagram(examples['test_2']['input'][0], examples['test_2']['input'][1])
         if test_2 == examples['test_2']['expected']:
             res['test_2'] = {
                 'status': 'OK',
@@ -59,7 +57,7 @@ def main():
         }
 
     try:
-        test_3 = fibonacci(examples['test_3']['input'])
+        test_3 = anagram(examples['test_3']['input'][0], examples['test_3']['input'][1])
         if test_3 == examples['test_3']['expected']:
             res['test_3'] = {
                 'status': 'OK',
@@ -79,54 +77,6 @@ def main():
             'status': 'Error',
             'input': examples['test_3']['input'],
             'expected': examples['test_3']['expected'],
-            'got': str(error)
-        }
-
-    try:
-        test_4 = fibonacci(examples['test_4']['input'])
-        if test_4 == examples['test_4']['expected']:
-            res['test_4'] = {
-                'status': 'OK',
-                'input': examples['test_4']['input'],
-                'expected': examples['test_4']['expected'],
-                'got': test_4
-            }
-        else:
-            res['test_4'] = {
-                'status': 'Error',
-                'input': examples['test_4']['input'],
-                'expected': examples['test_4']['expected'],
-                'got': test_4
-            }
-    except Exception as error:
-        res['test_4'] = {
-            'status': 'Error',
-            'input': examples['test_4']['input'],
-            'expected': examples['test_4']['expected'],
-            'got': str(error)
-        }
-
-    try:
-        test_5 = fibonacci(examples['test_5']['input'])
-        if test_5 == examples['test_5']['expected']:
-            res['test_5'] = {
-                'status': 'OK',
-                'input': examples['test_5']['input'],
-                'expected': examples['test_5']['expected'],
-                'got': test_5
-            }
-        else:
-            res['test_5'] = {
-                'status': 'Error',
-                'input': examples['test_5']['input'],
-                'expected': examples['test_5']['expected'],
-                'got': test_5
-            }
-    except Exception as error:
-        res['test_5'] = {
-            'status': 'Error',
-            'input': examples['test_5']['input'],
-            'expected': examples['test_5']['expected'],
             'got': str(error)
         }
 
