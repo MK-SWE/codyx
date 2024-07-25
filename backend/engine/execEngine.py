@@ -46,6 +46,10 @@ class DOCKER:
             if 'base:latest' not in images:
                 DOCKER.rebase()
 
+            images = subprocess.run(['docker', 'images', '--format', '{{.Repository}}:{{.Tag}}'], stdout=subprocess.PIPE).stdout.decode().strip()
+            if 'base:latest' not in images:
+                subprocess.run(['docker', 'pull', 'mkswe/base:latest'], check=True)
+
             container_id = subprocess.run(['docker', 'run', '-d',
                                            '-v', f'{DOCKER.config["checker"]}:/usr/src/app/checker',
                                            '-it', 'base:latest'],
