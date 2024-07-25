@@ -111,7 +111,7 @@ class DBStorage():
 
     def query(self, cls):
         """query on the current database session"""
-        return self.__session.query
+        return self.__session.query(cls)
 
     def rollback(self):
         """rollback a transaction"""

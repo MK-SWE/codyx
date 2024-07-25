@@ -177,3 +177,6 @@ backend/Cli.commands
 # Ignore local certificates and keys
 *.key
 *.pem
+
+# Ignore local testing
+*.test
