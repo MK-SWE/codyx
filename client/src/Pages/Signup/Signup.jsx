@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { register } from '../../redux/reducers/authSlice';
 import { Link } from 'react-router-dom';
 import './Signup.css';
@@ -14,7 +14,6 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const location = useLocation();
-  const error = useSelector((state) => state.user.error);
 
   const validate = () => {
     const newErrors = {};
@@ -60,9 +59,7 @@ const Signup = () => {
     try {
       if (validate()) {
         await dispatch(register({ Username, Name, Email, Password}));
-        if (!error) {
-          navigate(from, { replace: true });
-        }
+        navigate(from, { replace: true });
         
       }
     } catch (error) {

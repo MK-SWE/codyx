@@ -6,13 +6,13 @@ import './Login.css';
 // import { useNavigate, useLocation } from 'react-router-dom';
 
 
+
 const Login = () => {
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState('');
   // const navigate = useNavigate();
   // const location = useLocation();
   const [errors, setErrors] = useState({});
-
   const validate = () => {
     const newErrors = {};
   
@@ -64,7 +64,7 @@ const Login = () => {
             value={Username} 
             onChange={handleUsernameChange} 
             placeholder="Enter your Email"/>
-            {errors.email && <p className="error">{errors.email}</p>}
+            {errors.Username && <p className="error">{errors.Username}</p>}
         </div>
         <div>
           <label>Password:</label>

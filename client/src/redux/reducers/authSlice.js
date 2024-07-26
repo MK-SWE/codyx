@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from 'axios';
+// import Cookies from 'js-cookie';
 
 const initialState = { 
   user: null,
@@ -8,35 +10,58 @@ const initialState = {
   error: null,
 };
 
+// export const login = createAsyncThunk(
+//   "auth/login",
+//   async (userData, { rejectWithValue }) => {
+//     try {
+//       const response = await fetch("http://localhost:5000/login", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/x-www-form-urlencoded",
+//         },
+//         body: new URLSearchParams(userData).toString(),
+//         credentials: 'include'
+//       });
+//       const data = await response.json();
+//       if (!response.ok) {
+//         throw new Error(data.message || "Something went wrong!");
+//       }
+//       // console.log(Cookies.get('session_id'));
+//       console.log(data);
+//       return data;
+//     } catch (error) {
+//       return rejectWithValue(error);
+//     }
+//   }
+// );
 export const login = createAsyncThunk(
   "auth/login",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams(userData).toString(),
-        credentials: 'include'
-      });
-      const data = await response.json();
-      if (!response.ok) {
+      const response = await axios.post(
+        "http://localhost:5000/login",
+        new URLSearchParams(userData).toString(),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          withCredentials: true,
+        }
+      );
+
+      const data = response.data;
+
+      if (response.status !== 200) {
         throw new Error(data.message || "Something went wrong!");
       }
-      const Header = response.headers;
-      console.log(Header);
 
-      if (response.headers.has('session_id')) {
-        const sessionId = response.headers.get('session_id');
-        console.log('Session ID:', sessionId);
+      console.log(response.headers);
+      const cookie = response.headers['set-cookie'];
+      console.log(cookie);
 
-        document.cookie = `session_id=${sessionId}; path=/;`;
-      }
-      console.log(data);
       return data;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.response ? error.response.data : error.message);
     }
   }
 );
