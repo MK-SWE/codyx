@@ -3,26 +3,26 @@ import { useDispatch } from 'react-redux';
 import { login } from '../../redux/reducers/authSlice';
 import { Link } from 'react-router-dom';
 import './Login.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+// import { useNavigate, useLocation } from 'react-router-dom';
 
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [Username, setUsername] = useState('');
+  const [Password, setPassword] = useState('');
+  // const navigate = useNavigate();
+  // const location = useLocation();
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const newErrors = {};
   
-    if (!email) {
-      newErrors.email = 'Email is required.';
-    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
-      newErrors.email = 'Invalid email format.';
+    if (!Username) {
+      newErrors.Username = 'Username is required.';
+    } else if (!/^[A-Za-z0-9_]{3,20}$/i.test(Username)) {
+      newErrors.Username = 'Invalid Username format.';
     }
   
-    if (!password || password.length < 6) {
+    if (!Password || Password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters long.';
     }
   
@@ -30,8 +30,8 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
   
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -39,13 +39,13 @@ const Login = () => {
   };
 
   const dispatch = useDispatch();
-  const from = location.state?.from || '/'; 
+  // const from = location.state?.from || '/problems';
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
       if (validate()) {
-        await dispatch(login({ email, password }));
-        navigate(from, { replace: true });
+        await dispatch(login({ Username, Password }));
+        // navigate(from, { replace: true });
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -58,11 +58,11 @@ const Login = () => {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Email:</label>
+          <label>Username:</label>
           <input 
-            type="email" 
-            value={email} 
-            onChange={handleEmailChange} 
+            type="text" 
+            value={Username} 
+            onChange={handleUsernameChange} 
             placeholder="Enter your Email"/>
             {errors.email && <p className="error">{errors.email}</p>}
         </div>
@@ -70,7 +70,7 @@ const Login = () => {
           <label>Password:</label>
           <input 
             type="password" 
-            value={password} 
+            value={Password} 
             onChange={handlePasswordChange} 
             placeholder="Enter your password"
           />

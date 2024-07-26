@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../redux/reducers/authSlice';
 import { Link } from 'react-router-dom';
 import './Signup.css';
@@ -7,27 +7,29 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 
 const Signup = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [Username, setUsername] = useState('');
+  const [Email, setEmail] = useState('');
+  const [Password, setPassword] = useState('');
+  const [Name, setName] = useState('');
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const location = useLocation();
+  const error = useSelector((state) => state.user.error);
 
   const validate = () => {
     const newErrors = {};
 
-    if (!name) {
+    if (!Name) {
       newErrors.name = 'Name is required.';
     }
 
-    if (!email) {
-      newErrors.email = 'Email is required.';
-    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+    if (!Email) {
+      newErrors.Email = 'Email is required.';
+    } else if (!/^\S+@\S+\.\S+$/.test(Email)) {
       newErrors.email = 'Invalid email format.';
     }
 
-    if (!password || password.length < 6) {
+    if (!Password || Password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters long.';
     }
 
@@ -35,7 +37,10 @@ const Signup = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+  
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -49,13 +54,16 @@ const Signup = () => {
   };
 
   const dispatch = useDispatch();
-  const from = location.state?.from || '/'; 
+  const from = location.state?.from || '/login'; 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (validate()) {
-        await dispatch(register({ name, email, password}));
-        navigate(from, { replace: true });
+        await dispatch(register({ Username, Name, Email, Password}));
+        if (!error) {
+          navigate(from, { replace: true });
+        }
+        
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -67,11 +75,21 @@ const Signup = () => {
     <div className='signup-form'>
       <h2>Signup</h2>
       <form onSubmit={handleSubmit}>
+      <div>
+          <label>Username:</label>
+          <input 
+            type="text" 
+            value={Username} 
+            onChange={handleUsernameChange}
+            placeholder="Enter your Username"
+          />
+          {errors.Username && <p className="error">{errors.Username}</p>}
+        </div>
         <div>
           <label>Name:</label>
           <input 
             type="text" 
-            value={name} 
+            value={Name} 
             onChange={handleNameChange}
             placeholder="Enter your Name"
           />
@@ -81,7 +99,7 @@ const Signup = () => {
           <label>Email:</label>
           <input 
             type="email" 
-            value={email} 
+            value={Email} 
             onChange={handleEmailChange} 
             placeholder="Enter your Email"
           />
@@ -91,7 +109,7 @@ const Signup = () => {
           <label>Password:</label>
           <input 
             type="password" 
-            value={password} 
+            value={Password} 
             onChange={handlePasswordChange}  
             placeholder="Enter your password"
           />

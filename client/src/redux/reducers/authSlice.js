@@ -15,14 +15,25 @@ export const login = createAsyncThunk(
       const response = await fetch("http://localhost:5000/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        form: JSON.stringify(userData),
+        body: new URLSearchParams(userData).toString(),
+        credentials: 'include'
       });
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || "Something went wrong!");
       }
+      const Header = response.headers;
+      console.log(Header);
+
+      if (response.headers.has('session_id')) {
+        const sessionId = response.headers.get('session_id');
+        console.log('Session ID:', sessionId);
+
+        document.cookie = `session_id=${sessionId}; path=/;`;
+      }
+      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue(error);
@@ -31,20 +42,21 @@ export const login = createAsyncThunk(
 );
 
 export const register = createAsyncThunk(
-  "auth/register",
+  "auth/signup",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/register", {
+      const response = await fetch("http://localhost:5000/signup", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        form: JSON.stringify(userData),
+        body: new URLSearchParams(userData).toString(),
       });
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || "Something went wrong!");
       }
+      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue(error);
@@ -84,7 +96,6 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.loading = false;
 
-        localStorage.setItem("token", action.payload.token);
         localStorage.setItem("user", JSON.stringify(action.payload.user));
       })
       .addCase(login.rejected, (state, action) => {
@@ -95,9 +106,7 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(register.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-        state.isAuthenticated = true;
+        state.user = action.payload.full_name;
         state.loading = false;
       })
       .addCase(register.rejected, (state, action) => {

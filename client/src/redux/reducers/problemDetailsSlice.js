@@ -12,7 +12,7 @@ export const fetchProblemDetails = createAsyncThunk(
   "problemDetails/fetchProblemDetails",
   async (problemId, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/problems/${problemId}`);
+      const response = await fetch(`http://localhost:5000/challenges/${problemId}`);
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || "Something went wrong!");
