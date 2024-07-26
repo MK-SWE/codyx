@@ -1,39 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
-// import Cookies from 'js-cookie';
 
 const initialState = { 
   user: null,
-  token: null,
   isAuthenticated: false,
   loading: false,
   error: null,
 };
 
-// export const login = createAsyncThunk(
-//   "auth/login",
-//   async (userData, { rejectWithValue }) => {
-//     try {
-//       const response = await fetch("http://localhost:5000/login", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/x-www-form-urlencoded",
-//         },
-//         body: new URLSearchParams(userData).toString(),
-//         credentials: 'include'
-//       });
-//       const data = await response.json();
-//       if (!response.ok) {
-//         throw new Error(data.message || "Something went wrong!");
-//       }
-//       // console.log(Cookies.get('session_id'));
-//       console.log(data);
-//       return data;
-//     } catch (error) {
-//       return rejectWithValue(error);
-//     }
-//   }
-// );
 export const login = createAsyncThunk(
   "auth/login",
   async (userData, { rejectWithValue }) => {
@@ -54,11 +28,6 @@ export const login = createAsyncThunk(
       if (response.status !== 200) {
         throw new Error(data.message || "Something went wrong!");
       }
-
-      console.log(response.headers);
-      const cookie = response.headers['set-cookie'];
-      console.log(cookie);
-
       return data;
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : error.message);
@@ -88,28 +57,29 @@ export const register = createAsyncThunk(
     }
   }
 );
-
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("http://localhost:5000/logout", {
+        withCredentials: true,
+      });
+      if (response.status !== 200) {
+        throw new Error("Logout failed!");
+      }
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response ? error.response.data : error.message);
+    }
+  }
+);
 
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    logout(state) {
-      state.user = null;
-      state.token = null;
-      state.isAuthenticated = false;
-      state.error = null; // Clear the error field
-      localStorage.clear();
-    },
-    addToken(state) {
-      state.token = localStorage.getItem("token");
-    },
-    addUser(state) {
-      state.user = JSON.parse(localStorage.getItem("user"));
-    }
-
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -117,15 +87,14 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.user = action.payload.user;
-        state.token = action.payload.token;
         state.isAuthenticated = true;
         state.loading = false;
-
-        localStorage.setItem("user", JSON.stringify(action.payload.user));
+        console.log(state.user);
       })
       .addCase(login.rejected, (state, action) => {
         state.error = action.payload.message;
         state.loading = false;
+        console.log("re");
       })
       .addCase(register.pending, (state) => {
         state.loading = true;
@@ -135,6 +104,18 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(register.rejected, (state, action) => {
+        state.error = action.payload.message;
+        state.loading = false;
+      })
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
+        state.isAuthenticated = false;
+        state.loading = false;
+      })
+      .addCase(logout.rejected, (state, action) => {
         state.error = action.payload.message;
         state.loading = false;
       });

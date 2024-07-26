@@ -29,18 +29,22 @@ function ProblemEditor(props) {
   };
 
   useEffect(() => {
-    if (error) {
-      console.log("error");
-    } else if (data.success && !success) {
+    if (data.success && !success) {
       setSuccess(true);
       toast.success("submitted successfully", {
         position: "top-center",
         autoClose: 4000,
         closeOnClick: true,
         theme: "dark",
+      })}
+    else if (data.error && !success) {
+        toast.error("submission failed", {
+          position: "top-center",
+          autoClose: 4000,
+          closeOnClick: true,
+          theme: "dark",
+        })
       }
-      );
-    }
   }, [error, data, success]);
 
   return (

@@ -9,15 +9,24 @@ const initialState = {
 export const fetchProblems = createAsyncThunk(
   'problems/fetchProblems', 
   async () => {
-    const response = await fetch('http://localhost:5000/challenges', {
-      headers: {
-        'Cookie': 'session_id=YOUR_SESSION_ID_HERE'
+    try {
+      const response = await fetch('http://localhost:5000/challenges', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch problems');
       }
-    });
-    if (!response.ok) {
-      throw new Error('Failed to fetch problems');
+      return await response.json();
+    } catch (error) {
+      console.log("errrr");
+      console.error('Error fetching problems:', error); 
+      throw error;
     }
-    return await response.json();
   }
 );
 

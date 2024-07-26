@@ -1,25 +1,26 @@
 import { Link } from "react-router-dom";
 import './Navbar.css';
-import { useState } from "react";
 import { useSelector } from "react-redux";
-import { authActions } from "../../redux/reducers/authSlice";
 import { useDispatch } from "react-redux";
+import { logout } from "../../redux/reducers/authSlice";
 
 function Navbar() {
-  const isLoggedIn = useState(useSelector(state => state.user.isAuthenticated))[0];
+  const isLoggedIn = useSelector(state => state.user.isAuthenticated);
   const dispatch = useDispatch();
   const handleLogout = () => {
-    dispatch(authActions.logout());
+    dispatch(logout());
   }
 
   return (
     <div className="navbar">
       <h1><Link to="/">codyX</Link></h1>
       <ul className="nav-menu">
-        <li><Link to="/problems">Problems</Link></li>
+        {isLoggedIn? <li><Link to="/problems">Problems</Link></li> :
+        <li><Link to="/login">Problems</Link></li>}
         <li><Link to="/about">About</Link></li>
       </ul>
       <div className="login">
+        {console.log(isLoggedIn)}
         {isLoggedIn ? (
           <Link to="/" onClick={handleLogout}><button>Logout</button></Link>
         ) : (
@@ -30,4 +31,4 @@ function Navbar() {
   )
 }
 
-export default Navbar
+export default Navbar;

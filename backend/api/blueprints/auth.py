@@ -112,8 +112,23 @@ def test():
 @auth.route('/challenges', methods=['GET'])
 @login_required
 def problems():
-    challenges = db.query(Challenge).all()
-    return jsonify(challenges), 200
+    # challenges = db.query(Challenge).all()
+    # challenges_list = [challenge.to_dict() for challenge in challenges]
+    # return jsonify(challenges_list), 200
+    problem = [{
+        "id": "twoSum",
+		"title": "Two Sum",
+		"difficulty": "Easy",
+		"category": "Array",
+    },
+	{
+		"id": "reverse-linked-list",
+		"title": "Reverse Linked List",
+		"difficulty": "Hard",
+		"category": "Linked List"
+    },
+    ]
+    return jsonify(problem)
 
 @auth.route('/challenges/<param>', methods=['GET'])
 def problem(param):
@@ -152,4 +167,7 @@ def problem(param):
 def submit():
     """ Submit page route handler """
     print(request.get_json())
-    return "<h1>Welcome to CodyX submit page</h1>"
+    if (request.get_json().get('code') == 'function twoSum(nums, target) {\n  // Your code here\n}'):
+        return jsonify({"error": True})
+    success = False
+    return jsonify({"success": True})

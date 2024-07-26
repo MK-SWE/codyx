@@ -51,7 +51,7 @@ def create_app():
         response.headers['X-Frame-Options'] = 'DENY'
         response.headers['X-XSS-Protection'] = '1; mode=block'
         response.headers['Content-Security-Policy'] = "default-src 'self'"
-        response.headers['Referrer-Policy'] = 'same-origin'
+        # response.headers['Referrer-Policy'] = 'same-origin'
         return response
 
     @app.teardown_appcontext
