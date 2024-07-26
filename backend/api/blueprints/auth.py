@@ -29,8 +29,7 @@ def login():
         response = jsonify(
             {
                 'message': 'User already logged in',
-                'session_id': current_user.session_token
-                },
+                'session_token': session.sid},
             ), 200
         return make_response(response)
 

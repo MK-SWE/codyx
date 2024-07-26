@@ -27,7 +27,7 @@ def create_app():
     
 
     # create app extensions
-    CORS(app)
+    CORS(app, supports_credentials=True)
     Session(app)
 
     # create the user manager
