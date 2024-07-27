@@ -1,8 +1,9 @@
-""" Create rests for the badges system. """
+""" Create tests for the badges system. """
 from flask import Blueprint, jsonify, request
 from backend.models import User
 from backend import db
-from backend.badges.badges import BADGES, award_badge, get_badges, has_badge, get_badge
+from backend.api import app
+from backend.badges.badges import BADGES, award_badge, get_badges, has_badge, get_badge, get_all_badges
 import unittest
 
 
@@ -75,6 +76,120 @@ def check_user_badge(user_id, badge_id):
 @badges.route("/badges/<int:badge_id>", methods=["GET"])
 def get_specific_badge(badge_id):
     return jsonify(get_badge(badge_id))
+
+
+# Test the API routes
+class TestBadgeAPI(unittest.TestCase):
+
+    def setUp(self):
+        self.app = app.test_client()
+
+    def test_get_badges(self):
+        """Tests the GET /badges route."""
+        response = self.app.get("/badges")
+        data = response.get_json()
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(data), len(BADGES))
+
+    def test_award_badge(self):
+        """Tests the POST /badges/award route."""
+        user = User([])
+        db.session.add(user)
+        db.session.commit()
+
+        # Data to send with the request
+        data = {"user_id": user.id, "badge_id": 1}
+
+        response = self.app.post("/badges/award", json=data)
+        user = User.query.get(user.id)
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(1 in user.badges)
+
+    def test_get_user_badges(self):
+        """Tests the GET /badges/user/<user_id> route."""
+        user = User([1, 2, 3])
+        db.session.add(user)
+        db.session.commit()
+
+        response = self.app.get(f"/badges/user/{user.id}")
+        data = response.get_json()
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(data), len(user.badges))
+
+    def test_check_user_badge(self):
+        """Tests the GET /badges/user/<user_id>/<badge_id> route."""
+        user = User([1, 2, 3])
+        db.session.add(user)
+        db.session.commit()
+
+        response = self.app.get(f"/badges/user/{user.id}/1")
+        data = response.get_json()
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(data)
+
+    def test_get_specific_badge(self):
+        """Tests the GET /badges/<badge_id> route."""
+        badge_id = 1
+        response = self.app.get(f"/badges/{badge_id}")
+        data = response.get_json()
+
+        # Assertions
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["name"], BADGES[badge_id]["name"])
+
+    # Docstring test (using a custom decorator)
+    @unittest.skipIf(not award_badge.__doc__, "Function has no docstring")
+    def test_award_badge_docstring(self):
+        """Tests if the `award_badge` function has a docstring."""
+        self.assertIsNotNone(award_badge.__doc__)
+
+
+    # Docstring test (using a custom decorator)
+    @unittest.skipIf(not get_badges.__doc__, "Function has no docstring")
+    def test_get_badges_docstring(self):
+        """Tests if the `get_badges` function has a docstring."""
+        self.assertIsNotNone(get_badges.__doc__)
+    
+    # Docstring test (using a custom decorator)
+    @unittest.skipIf(not has_badge.__doc__, "Function has no docstring")
+    def test_has_badge_docstring(self):
+        """Tests if the `has_badge` function has a docstring."""
+        self.assertIsNotNone(has_badge.__doc__)
+
+    # Docstring test
+    def test_get_badge_docstring(self):
+        """Tests if the `get_badge` function has a docstring."""
+        self.assertIsNotNone(get_badge.__doc__)
+
+    # Docstring test
+    def test_get_all_badges_docstring(self):
+        """Tests if the `get_all_badges` function has a docstring."""
+        self.assertIsNotNone(get_all_badges.__doc__)
+    
+    # Docstring test
+    def test_award_badge_docstring(self):
+        """Tests if the `award_badge` function has a docstring."""
+        self.assertIsNotNone(award_badge.__doc__)
+    
+    # Docstring test
+    def test_get_badges_docstring(self):
+        """Tests if the `get_badges` function has a docstring."""
+        self.assertIsNotNone(get_badges.__doc__)
+    
+    # Docstring test
+    def test_get_all_badges_docstring(self):
+        """Tests if the `get_all_badges` function has a docstring."""
+        self.assertIsNotNone(get_all_badges.__doc__)
+
+
 
 
 # Run the tests
