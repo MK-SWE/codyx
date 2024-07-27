@@ -8,11 +8,10 @@ import About from './Pages/About';
 import store from './store';
 import { Provider } from 'react-redux';
 import Login from './Pages/Login/Login'
-import Signup from './Pages/Signup/Signup'
+import Signup from './Pages/Signup/Signup';
 
 function App() {
   
-
   return (
     <div className='app'>
       <Provider store={store}>

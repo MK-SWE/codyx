@@ -29,3 +29,23 @@ a {
   border: 1px solid #adb5bd;
   border-radius: 8px;
 }
+.logout-icon {
+  color: #fff;
+  margin-right: 20px;
+}
+.navbar .login {
+  position: relative;
+}
+.user-email {
+  display: none;
+  font-size: 12px;
+  position: absolute;
+  top: 20px;
+  right: 0;
+}
+.user-icon {
+  cursor: pointer;
+}
+.user-icon:hover + .user-email{
+  display: block;
+}
