@@ -5,6 +5,7 @@ from sqlalchemy import Column, String, Integer, Boolean
 from datetime import datetime
 from backend.engine.execEngine import DOCKER
 import json
+import ast
 
 
 
@@ -92,16 +93,13 @@ class User(BaseModel, Base, UserMixin):
         """
         if challenge:
             res = DOCKER.run_tests(self.id, challenge.name, code, lang)
-            if res:
-                res = json.loads(res)
-            else:
-                res = {}
+            res = ast.literal_eval(res)
             failed_tests = []
             for k, v in res.items():
                 if v["status"] != 'OK':
                     failed_tests.append(k)
             if len(failed_tests) > 0:
-                score = (100 - ((len(failed_tests) / len(res.keys())) * 100)) / 100
+                score = 1 - (len(failed_tests) / len(res.keys()))
             else:
                 score = 1
             if challenge.difficulty == 'easy':
@@ -112,7 +110,7 @@ class User(BaseModel, Base, UserMixin):
                 self.points += 30 * score
             self.save()
             res = {
-                "score": score,
+                "score": f"{score * 100:.2f}%",
                 "failed_tests": failed_tests
             }
             return res

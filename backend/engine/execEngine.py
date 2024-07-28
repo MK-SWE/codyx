@@ -101,7 +101,7 @@ class DOCKER:
         """
         DOCKER.containers = DOCKER.get_containers()
         if len(DOCKER.containers) == 0:
-            DOCKER.new_container
+            DOCKER.new_container()
         return
 
     @staticmethod

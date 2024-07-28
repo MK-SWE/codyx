@@ -183,3 +183,12 @@ def createChallenge():
     db.save()
     return jsonify(challenge.to_dict())
 
+@auth.route('/challenges/<id>/submit', methods=['POST'])
+@login_required
+def submitChallenge(id):
+    """ Submit solution route handler """
+    challenge = db.query(Challenge).filter_by(id=id).first()
+    code = request.form.get('code')
+    lang = request.form.get('lang')
+    res = current_user.submit_challenge(challenge, code, lang)
+    return jsonify(res), 200
