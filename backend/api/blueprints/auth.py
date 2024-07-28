@@ -20,6 +20,9 @@ Manager = LoginManager()
 def load_user(user_id):
     return User.get(user_id)
 
+"""
+User Section
+"""
 @auth.route('/login', methods=['GET', 'POST'])
 @cross_origin(supports_credentials=True)
 def login():
@@ -58,7 +61,6 @@ def login():
                 'message': 'User not found'
                 }), 401
     return jsonify({'error': 'Invalid request'}), 400
-
 
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -103,6 +105,44 @@ def logout():
         db.save()
         return make_response(response)
 
+@auth.route('/me', methods=['GET'])
+@login_required
+def user_profile():
+    """ User profile route handler """
+    user = current_user
+    return jsonify(user.to_dict()), 200
+
+@auth.route('/edit', methods=['POST'])
+@login_required
+def edit_user():
+    """ Edit user data route handler """
+    user = current_user
+    if request.method == 'POST':
+        try:
+            username = request.form.get('Username', None)
+            email = request.form.get('Email', None)
+            full_name = request.form.get('Name', None)
+            password = request.form.get('Password', None)
+            if username:
+                user.username = username
+            if email:
+                user.email = email
+            if full_name:
+                user.full_name = full_name
+            if password:
+                user.password = password
+            db.session.add(user)
+            db.save()
+            return jsonify({'user': user.to_dict(), 
+                            'message': 'User data updated successfully!'}
+                            ), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 400
+    return jsonify({'error': 'Invalid request'}), 400
+
+"""
+Challenges Section
+"""
 @auth.route('/test', methods=['GET'])
 @login_required
 def test():
@@ -111,63 +151,35 @@ def test():
 
 @auth.route('/challenges', methods=['GET'])
 @login_required
-def problems():
-    # challenges = db.query(Challenge).all()
-    # challenges_list = [challenge.to_dict() for challenge in challenges]
-    # return jsonify(challenges_list), 200
-    problem = [{
-        "id": "twoSum",
-		"title": "Two Sum",
-		"difficulty": "Easy",
-		"category": "Array",
-    },
-	{
-		"id": "reverse-linked-list",
-		"title": "Reverse Linked List",
-		"difficulty": "Hard",
-		"category": "Linked List"
-    },
-    ]
-    return jsonify(problem)
+def challenges():
+    challenges = db.query(Challenge).all()
+    return jsonify([challenge.to_dict() for challenge in challenges]), 200
 
-@auth.route('/challenges/<param>', methods=['GET'])
-def problem(param):
-    """ Problem page route handler """
-    # TODO: Retrieve problem details based on the param
-    problemDetails = {
-        'id': 1,
-        'title': "1. Two Sum",
-        'problemStatement': "<p>\n  Given an array of integers <code>nums</code> and an integer <code>target</code>, return\n  <em>indices of the two numbers such that they add up to</em> <code>target</code>.\n</p>\n<p>\n  You may assume that each input would have <strong>exactly one solution</strong>, and you\n  may not use thesame element twice.\n</p>\n<p>You can return the answer in any order.</p>",
-        'examples': [
-            {
-                'id': 1,
-                'inputText': "nums = [2,7,11,15], target = 9",
-                'outputText': "[0,1]",
-                'explanation': "Because nums[0] + nums[1] == 9, we return [0, 1].",
-            },
-            {
-                'id': 2,
-                'inputText': "nums = [3,2,4], target = 6",
-                'outputText': "[1,2]",
-                'explanation': "Because nums[1] + nums[2] == 6, we return [1, 2].",
-            },
-            {
-                'id': 3,
-                'inputText': " nums = [3,3], target = 6",
-                'outputText': "[0,1]",
-            },
-        ],
-        'constraints': "<li'>\n  <code>2 ≤ nums.length ≤ 10</code>\n</li> <li>\n<code>-10 ≤ nums[i] ≤ 10</code>\n</li> <li>\n<code>-10 ≤ target ≤ 10</code>\n</li>\n<li>\n<strong>Only one valid answer exists.</strong>\n</li>",
-        'starterCode': "function twoSum(nums, target) {\n  // Your code here\n}",
-    }
-    return jsonify(problemDetails)
-
-@auth.route('/submit', methods=['POST'])
+@auth.route('/challenges/<id>', methods=['GET'])
 @login_required
-def submit():
-    """ Submit page route handler """
-    print(request.get_json())
-    if (request.get_json().get('code') == 'function twoSum(nums, target) {\n  // Your code here\n}'):
-        return jsonify({"error": True})
-    success = False
-    return jsonify({"success": True})
+def challenge(id):
+    """ Problem page route handler """
+    challenge = db.query(Challenge).filter_by(id=id).first()
+    return jsonify(challenge.to_dict()), 200
+
+@auth.route('/challenges/new', methods=['POST'])
+@login_required
+def createChallenge():
+    """ Create challenge route handler """
+    if current_user.role != 'admin':
+        return jsonify({'message': 'Unauthorized'}), 401
+    challenge = Challenge(
+        name=request.form.get('name'),
+        description=request.form.get('description'),
+        ex_input=request.form.get('ex_input'),
+        output=request.form.get('output'),
+        difficulty=request.form.get('difficulty'),
+        stars=0,
+        solved=0,
+        _starter_function=request.form.get('starter_function'),
+        examples=request.form.get('examples'),
+    )
+    db.session.add(challenge)
+    db.save()
+    return jsonify(challenge.to_dict())
+

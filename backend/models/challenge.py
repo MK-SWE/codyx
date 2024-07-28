@@ -14,7 +14,7 @@ class Challenge(BaseModel):
     output = Column(String(1024), nullable=False)
     difficulty = Column(String(128), nullable=False)
     _starter_function = Column('template', JSON, nullable=False)
-    examples = Column(String(1024), nullable=False)
+    examples = Column('example', JSON, nullable=False)
     stars = Column(Integer, default=0)
     solved = Column(Integer, default=0)
 
