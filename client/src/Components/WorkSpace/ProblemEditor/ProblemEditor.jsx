@@ -1,5 +1,6 @@
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
+import { python } from '@codemirror/lang-python';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import './ProblemEditor.css';
 import PropTypes from 'prop-types';
@@ -14,7 +15,7 @@ function ProblemEditor(props) {
   const { starterCode, id } = props;
   const [success, setSuccess] = useState(false);
   const [code, setCode] = useState(starterCode);
-  const language = 'javascript';
+  const [language, setLanguage] = useState("javascript"); 
 
   const dispatch = useDispatch();
   
@@ -47,17 +48,52 @@ function ProblemEditor(props) {
       }
   }, [error, data, success]);
 
+  const getExtension = () => {
+    switch (language){
+      case 'python':
+        return [python()];
+      case 'javascript':
+        return [javascript({ jsx: true })];
+    }
+  }
+
+  const handleLanguage = (value) => {
+      setLanguage(value);
+      switch (value){
+        case 'python':
+          setCode(code.replace(/\/\//g, '#')
+                       .replace(/function/g, 'def')
+                       .replace(/{/g, ':')
+                       .replace(/}/g, '')
+          );
+          break;
+        case 'javascript':
+          setCode(code.replace(/#/g, '//')
+                      .replace(/def/g, 'function')
+                      .replace(/:/g, '{')
+                      + '}'
+          );
+      }
+  }
+
   return (
     <div className='codeeditor'>
       <div className='naveditor'>
-        <span className='codeType'>{language}</span>
+        <select
+          className='codeType'
+          value={language}
+          onChange={(e) => handleLanguage(e.target.value)}
+        >
+          <option value='javascript'>JavaScript</option>
+          <option value='python'>Python</option>
+        </select>
         <button onClick={handleSubmit}>Submit</button>
       </div>
       <CodeMirror
         value={code}
         theme={vscodeDark}
         height='88vh'
-        extensions={[javascript({ jsx: true })]}
+        extensions={getExtension()}
         onChange={(value) => setCode(value)}
       />
       {success && (

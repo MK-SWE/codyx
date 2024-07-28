@@ -50,7 +50,6 @@ export const register = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.message || "Something went wrong!");
       }
-      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue(error);
@@ -67,7 +66,6 @@ export const logout = createAsyncThunk(
       if (response.status !== 200) {
         throw new Error("Logout failed!");
       }
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : error.message);
@@ -99,7 +97,6 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.loading = false;
         localStorage.setItem('user', JSON.stringify(state.user));
-        console.log(state.user);
       })
       .addCase(login.rejected, (state, action) => {
         state.error = action.payload.message;

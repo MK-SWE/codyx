@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../redux/reducers/authSlice';
 import { Link } from 'react-router-dom';
 import './Login.css';
@@ -13,6 +13,8 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [errors, setErrors] = useState({});
+  const login_error = useSelector((state) => state.user.error);
+
   const validate = () => {
     const newErrors = {};
   
@@ -40,12 +42,15 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const from = location.state?.from || '/problems';
+
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
       if (validate()) {
         await dispatch(login({ Username, Password }));
-        navigate(from, { replace: true });
+        if (login_error) {
+          navigate(from, { replace: true });
+        }
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -55,6 +60,7 @@ const Login = () => {
 
   return (
     <div className='login-form'>
+      {login_error && <p className="error">{login_error}</p>}
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>

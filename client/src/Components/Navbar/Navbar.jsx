@@ -25,12 +25,10 @@ function Navbar() {
         <li><Link to="/about">About</Link></li>
       </ul>
       <div className="login">
-        {console.log("isloggedIn",isLoggedIn)}
         {isLoggedIn ? (
           <>
-          <Link to="/" onClick={handleLogout}><LuLogOut className="logout-icon"/></Link>
-          <FaUserCircle className="user-icon"/>
-          <span className="user-email">{email? email : null}</span>
+          <Link to="/" onClick={handleLogout}><LuLogOut title="logout" className="logout-icon"/></Link>
+          <FaUserCircle  title={email} className="user-icon"/>
           </>
         ) : (
           <Link to="/login"><button>Login</button></Link>
